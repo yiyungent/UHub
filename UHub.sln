@@ -11,6 +11,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "examples", "examples", "{2D
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UHub.Web", "src\Presentation\UHub.Web\UHub.Web.csproj", "{991AA893-8FB8-42C2-AE07-5FDC500A7A82}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspNetCoreWebApi", "examples\AspNetCoreWebApi\AspNetCoreWebApi.csproj", "{C3DD8313-C42E-4805-AFCA-FD6491E200AD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{991AA893-8FB8-42C2-AE07-5FDC500A7A82}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{991AA893-8FB8-42C2-AE07-5FDC500A7A82}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{991AA893-8FB8-42C2-AE07-5FDC500A7A82}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C3DD8313-C42E-4805-AFCA-FD6491E200AD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C3DD8313-C42E-4805-AFCA-FD6491E200AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C3DD8313-C42E-4805-AFCA-FD6491E200AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C3DD8313-C42E-4805-AFCA-FD6491E200AD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -28,6 +34,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{6E40457A-5C8A-4DD5-AFF7-4E5E96008821} = {86E10198-E11D-495B-8AAE-F6860A65C32F}
 		{991AA893-8FB8-42C2-AE07-5FDC500A7A82} = {6E40457A-5C8A-4DD5-AFF7-4E5E96008821}
+		{C3DD8313-C42E-4805-AFCA-FD6491E200AD} = {2DFF0D7F-0BFC-4492-B012-55CC46F24BA0}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {98A6454E-1A81-4F51-B060-2F1942A878F9}
