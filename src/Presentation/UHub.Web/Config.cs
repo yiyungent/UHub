@@ -4,7 +4,9 @@
 
 using IdentityServer4;
 using IdentityServer4.Models;
+using Microsoft.VisualBasic;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace UHub.Web
 {
@@ -21,7 +23,10 @@ namespace UHub.Web
         public static IEnumerable<ApiScope> ApiScopes =>
             new List<ApiScope>
             {
-                new ApiScope("api1", "My API")
+                new ApiScope("api1", "My API"),
+                new ApiScope("WeatherInfo", "天气信息"),
+                new ApiScope("IdentityInfo", "实体信息"),
+                new ApiScope("WeatherAndIdentity", "天气和实体信息", new string[]{ "WeatherInfo", "IdentityInfo" } )
             };
 
         public static IEnumerable<Client> Clients =>
@@ -58,7 +63,33 @@ namespace UHub.Web
                         IdentityServerConstants.StandardScopes.Profile,
                         "api1"
                     }
-                }
+                },
+
+                new Client
+                {
+                    ClientId = "webapi",
+                    ClientSecrets = { new Secret("secret".Sha256()) },
+
+                    AllowedGrantTypes = new string[] {
+                        GrantTypes.ResourceOwnerPassword.First(),
+                        GrantTypes.Code.First()
+                    },
+                    
+                    // where to redirect to after login
+                    RedirectUris = { "https://localhost:5002/signin-oidc" },
+
+                    // where to redirect to after logout
+                    PostLogoutRedirectUris = { "https://localhost:5002/signout-callback-oidc" },
+
+                    AllowedScopes = new List<string>
+                    {
+                        IdentityServerConstants.StandardScopes.OpenId,
+                        IdentityServerConstants.StandardScopes.Profile,
+                        // 允许访问 天气信息, 实体信息
+                        "WeatherInfo",
+                        "IdentityInfo"
+                    }
+                },
             };
     }
 }

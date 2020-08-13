@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 
 namespace AspNetCoreWebApi
 {
@@ -26,6 +27,37 @@ namespace AspNetCoreWebApi
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+
+            #region for UHub IdentityServer4
+            // accepts any access token issued by identity server
+            services.AddAuthentication("Bearer")
+                .AddJwtBearer("Bearer", options =>
+                {
+                    options.Authority = "https://localhost:5001";
+
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateAudience = false
+                    };
+                });
+
+            // adds an authorization policy to make sure the token is for scope 'api1'
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("GetWeather", policy =>
+                {
+                    policy.RequireAuthenticatedUser();
+                    policy.RequireClaim("scope", "WeatherInfo");
+                });
+                options.AddPolicy("GetIdentity", policy =>
+                {
+                    policy.RequireAuthenticatedUser();
+                    policy.RequireClaim("scope", "IdentityInfo");
+                });
+            });
+            #endregion
+
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -40,6 +72,8 @@ namespace AspNetCoreWebApi
 
             app.UseRouting();
 
+            app.UseAuthentication();
+            // 需要授权: 为了保护 api 资源
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
