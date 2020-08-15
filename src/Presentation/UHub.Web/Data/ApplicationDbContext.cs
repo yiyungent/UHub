@@ -21,5 +21,10 @@ namespace UHub.Web.Data
             // For example, you can rename the ASP.NET Identity table names and more.
             // Add your customizations after calling base.OnModelCreating(builder);
         }
+
+        public virtual DbSet<TaskInfo> TaskInfo { get; set; }
+
+        public virtual DbSet<TaskQueue> TaskQueue { get; set; }
+
     }
 }

@@ -10,7 +10,7 @@ using System.Linq;
 
 namespace UHub.Web
 {
-    public static class Config
+    public static class Ids4Config
     {
         public static IEnumerable<IdentityResource> IdentityResources =>
             new List<IdentityResource>

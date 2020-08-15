@@ -155,4 +155,8 @@
     <Folder Include="Data\Migrations\IdentityServer\PersistedGrantDb\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\Libraries\UHub.Core\UHub.Core.csproj" />
+  </ItemGroup>
+
 </Project>
