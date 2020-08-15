@@ -338,3 +338,9 @@ ASALocalRun/
 
 # BeatPulse healthcheck temp database
 healthchecksdb
+
+
+
+
+src/Presentation/UHub.Web/UHub.db-shm
+src/Presentation/UHub.Web/UHub.db-wal
