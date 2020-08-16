@@ -46,7 +46,7 @@ namespace UHub.Web.Controllers
             var context = _configurationDbContext;
             if (!context.Clients.Any())
             {
-                foreach (var client in Config.Clients)
+                foreach (var client in Ids4Config.Clients)
                 {
                     context.Clients.Add(client.ToEntity());
                 }
@@ -55,7 +55,7 @@ namespace UHub.Web.Controllers
 
             if (!context.IdentityResources.Any())
             {
-                foreach (var resource in Config.IdentityResources)
+                foreach (var resource in Ids4Config.IdentityResources)
                 {
                     context.IdentityResources.Add(resource.ToEntity());
                 }
@@ -64,7 +64,7 @@ namespace UHub.Web.Controllers
 
             if (!context.ApiScopes.Any())
             {
-                foreach (var resource in Config.ApiScopes)
+                foreach (var resource in Ids4Config.ApiScopes)
                 {
                     context.ApiScopes.Add(resource.ToEntity());
                 }

@@ -99,7 +99,7 @@ namespace UHub.Web
                 });
 
             // 添加后台任务
-            services.AddBackgroundServices();
+            //services.AddBackgroundServices();
         }
 
         public void Configure(IApplicationBuilder app)
