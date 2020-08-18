@@ -217,6 +217,66 @@ namespace UHub.Web.Data.Migrations.AspNetCoreIdentityDb
                     b.ToTable("AspNetUserRoles");
                 });
 
+            modelBuilder.Entity("UHub.Web.Models.TaskInfo", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(1000);
+
+                    b.Property<string>("DisplayName")
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(500);
+
+                    b.Property<string>("Name")
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(500);
+
+                    b.HasKey("ID");
+
+                    b.ToTable("TaskInfo");
+                });
+
+            modelBuilder.Entity("UHub.Web.Models.TaskQueue", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("CreateTime")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("ExecCount")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("ExpireTime")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("LastUpdateTime")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("SuccessTime")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("TaskInfoId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("TaskParameter")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("TaskState")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("TaskInfoId");
+
+                    b.ToTable("TaskQueue");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
                 {
                     b.HasOne("UHub.Web.Models.ApplicationRole", null)
@@ -274,6 +334,15 @@ namespace UHub.Web.Data.Migrations.AspNetCoreIdentityDb
                     b.HasOne("UHub.Web.Models.ApplicationUser", "User")
                         .WithMany()
                         .HasForeignKey("UserId1");
+                });
+
+            modelBuilder.Entity("UHub.Web.Models.TaskQueue", b =>
+                {
+                    b.HasOne("UHub.Web.Models.TaskInfo", "TaskInfo")
+                        .WithMany()
+                        .HasForeignKey("TaskInfoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

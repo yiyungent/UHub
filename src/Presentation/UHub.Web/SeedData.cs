@@ -33,8 +33,7 @@ namespace UHub.Web
                 using (var scope = serviceProvider.GetRequiredService<IServiceScopeFactory>().CreateScope())
                 {
                     var context = scope.ServiceProvider.GetService<ApplicationDbContext>();
-                    context.Database.EnsureCreated();
-                    context.SaveChanges();
+
                     context.Database.Migrate();
 
                     var userMgr = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
@@ -102,6 +101,31 @@ namespace UHub.Web
                     {
                         Log.Debug("bob already exists");
                     }
+
+                    // 初始测试任务
+                    #region 初始化测试任务
+                    if (context.TaskInfo.Count() == 0)
+                    {
+                        TaskInfo taskInfo1 = new TaskInfo
+                        {
+                            Name = "RenameUser",
+                            DisplayName = "用户重命名",
+                            Description = "用户重命名描述"
+                        };
+                        TaskInfo taskInfo2 = new TaskInfo
+                        {
+                            Name = "DeleteUser",
+                            DisplayName = "用户删除",
+                            Description = "用户删除描述"
+                        };
+                        context.TaskInfo.Add(taskInfo1);
+                        context.TaskInfo.Add(taskInfo2);
+                        context.SaveChanges();
+
+                        Log.Debug("TaskInfo 创建成功");
+                    }
+                    #endregion
+
                 }
             }
         }

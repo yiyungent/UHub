@@ -49,6 +49,21 @@ namespace UHub.Web.Data.Migrations.AspNetCoreIdentityDb
                 });
 
             migrationBuilder.CreateTable(
+                name: "TaskInfo",
+                columns: table => new
+                {
+                    ID = table.Column<int>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Name = table.Column<string>(maxLength: 500, nullable: true),
+                    DisplayName = table.Column<string>(maxLength: 500, nullable: true),
+                    Description = table.Column<string>(maxLength: 1000, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TaskInfo", x => x.ID);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
@@ -168,6 +183,32 @@ namespace UHub.Web.Data.Migrations.AspNetCoreIdentityDb
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "TaskQueue",
+                columns: table => new
+                {
+                    ID = table.Column<int>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    TaskInfoId = table.Column<int>(nullable: false),
+                    TaskParameter = table.Column<string>(nullable: true),
+                    CreateTime = table.Column<DateTime>(nullable: false),
+                    ExpireTime = table.Column<DateTime>(nullable: false),
+                    LastUpdateTime = table.Column<DateTime>(nullable: false),
+                    SuccessTime = table.Column<DateTime>(nullable: false),
+                    ExecCount = table.Column<int>(nullable: false),
+                    TaskState = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TaskQueue", x => x.ID);
+                    table.ForeignKey(
+                        name: "FK_TaskQueue_TaskInfo_TaskInfoId",
+                        column: x => x.TaskInfoId,
+                        principalTable: "TaskInfo",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -214,6 +255,11 @@ namespace UHub.Web.Data.Migrations.AspNetCoreIdentityDb
                 table: "AspNetUsers",
                 column: "NormalizedUserName",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TaskQueue_TaskInfoId",
+                table: "TaskQueue",
+                column: "TaskInfoId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -234,10 +280,16 @@ namespace UHub.Web.Data.Migrations.AspNetCoreIdentityDb
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "TaskQueue");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "TaskInfo");
         }
     }
 }

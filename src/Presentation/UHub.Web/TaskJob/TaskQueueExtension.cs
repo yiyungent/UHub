@@ -23,7 +23,7 @@ namespace UHub.Web.TaskJob
                 TaskInfo taskInfo = taskQueue.TaskInfo;
                 //taskQueue.TaskParameter;
 
-
+                Console.WriteLine($"执行任务: {taskInfo.DisplayName} {taskQueue.TaskParameter}");
 
 
 

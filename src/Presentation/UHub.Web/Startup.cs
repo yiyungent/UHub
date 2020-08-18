@@ -14,6 +14,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Reflection;
 using UHub.Web.TaskJob;
+using UHub.Web.Config;
 
 /// <summary>
 /// 用户信息 使用 ASP.NET Core Identity 存于 EF Core
@@ -80,7 +81,7 @@ namespace UHub.Web
                 {
                     options.ConfigureDbContext = b => b.UseSqlite(connectionString,
                         sql => sql.MigrationsAssembly(migrationsAssembly));
-                }); 
+                });
             #endregion
 
             // not recommended for production - you need to store your key material somewhere secure
@@ -98,8 +99,12 @@ namespace UHub.Web
                     options.ClientSecret = "copy client secret from Google here";
                 });
 
+            // 添加 IOption 配置
+            services.AddOptions();
+            services.Configure<UHubOptions>(Configuration.GetSection("UHub"));
+
             // 添加后台任务
-            //services.AddBackgroundServices();
+            services.AddBackgroundServices();
         }
 
         public void Configure(IApplicationBuilder app)
