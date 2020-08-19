@@ -5,11 +5,10 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace UHub.Web.Models
+namespace UHub.Data.Models
 {
     /// <summary>
-    /// 消息任务
-    /// UHub -> 各个子应用
+    /// 任务
     /// </summary>
     public class TaskInfo
     {
@@ -28,5 +27,6 @@ namespace UHub.Web.Models
         [StringLength(1000)]
         public string Description { get; set; }
 
+        public string TaskType { get; set; }
     }
 }

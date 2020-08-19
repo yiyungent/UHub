@@ -17,7 +17,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AspNetCoreMvc", "examples\A
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Libraries", "Libraries", "{D3F036A3-4712-4453-804E-9B8F8DA76CEB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UHub.Core", "src\Libraries\UHub.Core\UHub.Core.csproj", "{B88ADE75-CB81-4820-92DB-81041822CE36}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UHub.Core", "src\Libraries\UHub.Core\UHub.Core.csproj", "{B88ADE75-CB81-4820-92DB-81041822CE36}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UHub.Data", "src\Libraries\UHub.Data\UHub.Data.csproj", "{53A9053A-9FF3-4773-B4FC-66B7F214C3E5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,6 +43,10 @@ Global
 		{B88ADE75-CB81-4820-92DB-81041822CE36}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B88ADE75-CB81-4820-92DB-81041822CE36}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B88ADE75-CB81-4820-92DB-81041822CE36}.Release|Any CPU.Build.0 = Release|Any CPU
+		{53A9053A-9FF3-4773-B4FC-66B7F214C3E5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{53A9053A-9FF3-4773-B4FC-66B7F214C3E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{53A9053A-9FF3-4773-B4FC-66B7F214C3E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{53A9053A-9FF3-4773-B4FC-66B7F214C3E5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -52,6 +58,7 @@ Global
 		{7E486BEF-349D-4564-B84A-8831F5537AE1} = {2DFF0D7F-0BFC-4492-B012-55CC46F24BA0}
 		{D3F036A3-4712-4453-804E-9B8F8DA76CEB} = {86E10198-E11D-495B-8AAE-F6860A65C32F}
 		{B88ADE75-CB81-4820-92DB-81041822CE36} = {D3F036A3-4712-4453-804E-9B8F8DA76CEB}
+		{53A9053A-9FF3-4773-B4FC-66B7F214C3E5} = {D3F036A3-4712-4453-804E-9B8F8DA76CEB}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {98A6454E-1A81-4F51-B060-2F1942A878F9}

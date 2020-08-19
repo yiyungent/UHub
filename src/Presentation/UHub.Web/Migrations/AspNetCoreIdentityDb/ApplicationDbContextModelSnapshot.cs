@@ -2,17 +2,16 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using UHub.Data;
 using UHub.Web.Data;
 
 namespace UHub.Web.Data.Migrations.AspNetCoreIdentityDb
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20200818110753_InitialAspNetCoreIdentityDbMigration")]
-    partial class InitialAspNetCoreIdentityDbMigration
+    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

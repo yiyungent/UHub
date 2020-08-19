@@ -4,7 +4,6 @@
 
 using IdentityServer4;
 using UHub.Web.Data;
-using UHub.Web.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -13,8 +12,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Reflection;
-using UHub.Web.TaskJob;
+using UHub.Web.BackgroundServices;
 using UHub.Web.Config;
+using UHub.Data;
+using UHub.Data.Models;
 
 /// <summary>
 /// 用户信息 使用 ASP.NET Core Identity 存于 EF Core

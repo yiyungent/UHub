@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using UHub.Web.Models;
+using UHub.Data.Models;
 
-namespace UHub.Web.Data
+namespace UHub.Data
 {
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, int, IdentityUserClaim<int>,
     ApplicationUserRole, IdentityUserLogin<int>,
@@ -25,6 +25,8 @@ namespace UHub.Web.Data
         public virtual DbSet<TaskInfo> TaskInfo { get; set; }
 
         public virtual DbSet<TaskQueue> TaskQueue { get; set; }
+
+        public virtual DbSet<AppInfo> AppInfo { get; set; }
 
     }
 }

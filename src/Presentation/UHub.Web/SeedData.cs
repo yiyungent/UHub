@@ -7,11 +7,12 @@ using System.Linq;
 using System.Security.Claims;
 using IdentityModel;
 using UHub.Web.Data;
-using UHub.Web.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
+using UHub.Data.Models;
+using UHub.Data;
 
 namespace UHub.Web
 {

@@ -5,11 +5,10 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace UHub.Web.Models
+namespace UHub.Data.Models
 {
     /// <summary>
-    /// 消息任务队列
-    /// UHub -> 各个子应用
+    /// 任务队列
     /// </summary>
     public class TaskQueue
     {
@@ -22,11 +21,11 @@ namespace UHub.Web.Models
         public TaskInfo TaskInfo { get; set; }
 
         /// <summary>
-        /// 此任务需要的参数
-        /// 消息参数
+        /// 此任务相关详细数据
         /// json字符串
         /// </summary>
-        public string TaskParameter { get; set; }
+        [StringLength(5000)]
+        public string TaskData { get; set; }
 
         public DateTime CreateTime { get; set; }
 
@@ -44,8 +43,6 @@ namespace UHub.Web.Models
         /// </summary>
         [Required]
         public int ExecCount { get; set; }
-
-        //public bool IsCompleted { get; set; }
 
         [Required]
         public TaskStateEnum TaskState { get; set; } = TaskStateEnum.WithoutExec;
@@ -67,5 +64,6 @@ namespace UHub.Web.Models
         /// 已执行过且标记为失败
         /// </summary>
         CompletedAndFailure = 2,
+
     }
 }

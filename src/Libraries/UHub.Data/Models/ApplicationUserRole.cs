@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace UHub.Web.Models
+namespace UHub.Data.Models
 {
     public class ApplicationUserRole : IdentityUserRole<int>
     {
