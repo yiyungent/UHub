@@ -41,7 +41,7 @@ namespace UHub.Web.BackgroundServices
                             m.TaskState != TaskStateEnum.CompletedAndSuccess
                             && m.ExecCount < _options.TaskMaxExecCount
                             && m.ExpireTime > DateTime.UtcNow
-                            && m.TaskInfo.TaskType == nameof(AppNoticeTask)
+                            && m.TaskInfo.TaskType == AppNoticeTask.TaskType
                            )
                         .OrderBy(m => m.ID).ToList();
                     IList<AppInfo> appInfos = dbContext.AppInfo.ToList();

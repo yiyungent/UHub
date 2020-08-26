@@ -13,17 +13,21 @@ namespace UHub.Web.Tasks
 {
     /// <summary>
     /// 应用通知任务
+    /// UHub --消息--> 某个应用
     /// </summary>
     public static class AppNoticeTask
     {
+        public const string TaskType = "AppNoticeTask";
+
         public static bool Execute(this AppNoticeTaskParameterModel model)
         {
             bool isSuccess = false;
             try
             {
                 string apiUrl = model.AppUrl;
-                // AppSecret 放在 Headers["Authorization"] = Bearer AppSecret
-                string bearerToken = model.AppSecret;
+                // AppSecret 放在 Headers["Authorization"] = Bearer AppId
+                // 只要应用获取 Bearer Token, 通过秘钥解密出 为 AppNotice, 则视为通过
+                string bearerToken = EncryptHelper.Encrypt("AppNotice", model.AppSecret);
                 // TODO: 使用 AppSecret 作为 key 对 Data 进行 AES 加密，再放在 request body
                 string postData = EncryptHelper.Encrypt(model.PostData, model.AppSecret);
                 // HTTP POST

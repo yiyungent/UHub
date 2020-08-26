@@ -94,6 +94,29 @@ namespace UHub.Web
                         "IdentityInfo"
                     }
                 },
+
+                 new Client
+                {
+                    ClientId = "Remember.Core",
+                    ClientSecrets = { new Secret("Remember.Core Secret".Sha256()) },
+
+                    AllowedGrantTypes = GrantTypes.ResourceOwnerPassword,
+                    
+                    // where to redirect to after login
+                    RedirectUris = { "https://localhost:5002/signin-oidc" },
+
+                    // where to redirect to after logout
+                    PostLogoutRedirectUris = { "https://localhost:5002/signout-callback-oidc" },
+
+                    AlwaysIncludeUserClaimsInIdToken = true,
+
+                    AllowedScopes = new List<string>
+                    {
+                        IdentityServerConstants.StandardScopes.OpenId,
+                        IdentityServerConstants.StandardScopes.Profile
+                    },
+                    AllowedCorsOrigins = { "https://localhost:5005" }
+                },
             };
     }
 }

@@ -1,12 +1,29 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace UHub.Web.Data.Migrations.AspNetCoreIdentityDb
+namespace UHub.Web.Migrations.AspNetCoreIdentityDb
 {
     public partial class InitialAspNetCoreIdentityDbMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "AppInfo",
+                columns: table => new
+                {
+                    ID = table.Column<int>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    DisplayName = table.Column<string>(maxLength: 500, nullable: true),
+                    BaseUrl = table.Column<string>(maxLength: 500, nullable: true),
+                    AppSecret = table.Column<string>(maxLength: 500, nullable: true),
+                    CreateTime = table.Column<DateTime>(nullable: false),
+                    LastUpdateTime = table.Column<DateTime>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AppInfo", x => x.ID);
+                });
+
             migrationBuilder.CreateTable(
                 name: "AspNetRoles",
                 columns: table => new
@@ -56,7 +73,8 @@ namespace UHub.Web.Data.Migrations.AspNetCoreIdentityDb
                         .Annotation("Sqlite:Autoincrement", true),
                     Name = table.Column<string>(maxLength: 500, nullable: true),
                     DisplayName = table.Column<string>(maxLength: 500, nullable: true),
-                    Description = table.Column<string>(maxLength: 1000, nullable: true)
+                    Description = table.Column<string>(maxLength: 1000, nullable: true),
+                    TaskType = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -190,7 +208,7 @@ namespace UHub.Web.Data.Migrations.AspNetCoreIdentityDb
                     ID = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     TaskInfoId = table.Column<int>(nullable: false),
-                    TaskParameter = table.Column<string>(nullable: true),
+                    TaskData = table.Column<string>(maxLength: 5000, nullable: true),
                     CreateTime = table.Column<DateTime>(nullable: false),
                     ExpireTime = table.Column<DateTime>(nullable: false),
                     LastUpdateTime = table.Column<DateTime>(nullable: false),
@@ -264,6 +282,9 @@ namespace UHub.Web.Data.Migrations.AspNetCoreIdentityDb
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "AppInfo");
+
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
 

@@ -6,13 +6,17 @@ using System;
 using System.Linq;
 using System.Security.Claims;
 using IdentityModel;
-using UHub.Web.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using UHub.Data.Models;
 using UHub.Data;
+using System.Reflection;
+using UHub.Web.Api;
+using AutoMapper.Internal;
+using UHub.Web.Tasks;
+using UHub.Web.Attributes;
 
 namespace UHub.Web
 {
@@ -33,9 +37,9 @@ namespace UHub.Web
             {
                 using (var scope = serviceProvider.GetRequiredService<IServiceScopeFactory>().CreateScope())
                 {
-                    var context = scope.ServiceProvider.GetService<ApplicationDbContext>();
+                    var dbContext = scope.ServiceProvider.GetService<ApplicationDbContext>();
 
-                    context.Database.Migrate();
+                    dbContext.Database.Migrate();
 
                     var userMgr = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
                     var alice = userMgr.FindByNameAsync("alice").Result;
@@ -103,25 +107,23 @@ namespace UHub.Web
                         Log.Debug("bob already exists");
                     }
 
-                    // 初始测试任务
-                    #region 初始化测试任务
-                    if (context.TaskInfo.Count() == 0)
+                    // 初始化任务
+                    #region 初始化 应用通信 任务信息TaskInfo
+                    if (!dbContext.TaskInfo.Any())
                     {
-                        TaskInfo taskInfo1 = new TaskInfo
+                        Type[] types = Assembly.GetExecutingAssembly().GetTypes().Where(m => m.BaseType == typeof(AppNoticePostDataModel)).ToArray();
+                        foreach (var type in types)
                         {
-                            Name = "RenameUser",
-                            DisplayName = "用户重命名",
-                            Description = "用户重命名描述"
-                        };
-                        TaskInfo taskInfo2 = new TaskInfo
-                        {
-                            Name = "DeleteUser",
-                            DisplayName = "用户删除",
-                            Description = "用户删除描述"
-                        };
-                        context.TaskInfo.Add(taskInfo1);
-                        context.TaskInfo.Add(taskInfo2);
-                        context.SaveChanges();
+                            TaskInfo taskInfo = new TaskInfo
+                            {
+                                Name = type.Name.Replace("Model", ""),
+                                DisplayName = type.GetCustomAttribute<ApiNameAttribute>().DisplayName,
+                                Description = type.GetCustomAttribute<ApiNameAttribute>().Description,
+                                TaskType = AppNoticeTask.TaskType,
+                            };
+                            dbContext.TaskInfo.Add(taskInfo);
+                        }
+                        dbContext.SaveChanges();
 
                         Log.Debug("TaskInfo 创建成功");
                     }

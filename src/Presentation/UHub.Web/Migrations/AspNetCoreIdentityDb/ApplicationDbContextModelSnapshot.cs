@@ -4,9 +4,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using UHub.Data;
-using UHub.Web.Data;
 
-namespace UHub.Web.Data.Migrations.AspNetCoreIdentityDb
+namespace UHub.Web.Migrations.AspNetCoreIdentityDb
 {
     [DbContext(typeof(ApplicationDbContext))]
     partial class ApplicationDbContextModelSnapshot : ModelSnapshot
@@ -101,7 +100,36 @@ namespace UHub.Web.Data.Migrations.AspNetCoreIdentityDb
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("UHub.Web.Models.ApplicationRole", b =>
+            modelBuilder.Entity("UHub.Data.Models.AppInfo", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("AppSecret")
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(500);
+
+                    b.Property<string>("BaseUrl")
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(500);
+
+                    b.Property<DateTime>("CreateTime")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("DisplayName")
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(500);
+
+                    b.Property<DateTime>("LastUpdateTime")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("AppInfo");
+                });
+
+            modelBuilder.Entity("UHub.Data.Models.ApplicationRole", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -128,7 +156,7 @@ namespace UHub.Web.Data.Migrations.AspNetCoreIdentityDb
                     b.ToTable("AspNetRoles");
                 });
 
-            modelBuilder.Entity("UHub.Web.Models.ApplicationUser", b =>
+            modelBuilder.Entity("UHub.Data.Models.ApplicationUser", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -193,7 +221,7 @@ namespace UHub.Web.Data.Migrations.AspNetCoreIdentityDb
                     b.ToTable("AspNetUsers");
                 });
 
-            modelBuilder.Entity("UHub.Web.Models.ApplicationUserRole", b =>
+            modelBuilder.Entity("UHub.Data.Models.ApplicationUserRole", b =>
                 {
                     b.Property<int>("UserId")
                         .HasColumnType("INTEGER");
@@ -218,7 +246,7 @@ namespace UHub.Web.Data.Migrations.AspNetCoreIdentityDb
                     b.ToTable("AspNetUserRoles");
                 });
 
-            modelBuilder.Entity("UHub.Web.Models.TaskInfo", b =>
+            modelBuilder.Entity("UHub.Data.Models.TaskInfo", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
@@ -236,12 +264,15 @@ namespace UHub.Web.Data.Migrations.AspNetCoreIdentityDb
                         .HasColumnType("TEXT")
                         .HasMaxLength(500);
 
+                    b.Property<string>("TaskType")
+                        .HasColumnType("TEXT");
+
                     b.HasKey("ID");
 
                     b.ToTable("TaskInfo");
                 });
 
-            modelBuilder.Entity("UHub.Web.Models.TaskQueue", b =>
+            modelBuilder.Entity("UHub.Data.Models.TaskQueue", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
@@ -262,11 +293,12 @@ namespace UHub.Web.Data.Migrations.AspNetCoreIdentityDb
                     b.Property<DateTime>("SuccessTime")
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("TaskData")
+                        .HasColumnType("TEXT")
+                        .HasMaxLength(5000);
+
                     b.Property<int>("TaskInfoId")
                         .HasColumnType("INTEGER");
-
-                    b.Property<string>("TaskParameter")
-                        .HasColumnType("TEXT");
 
                     b.Property<int>("TaskState")
                         .HasColumnType("INTEGER");
@@ -280,7 +312,7 @@ namespace UHub.Web.Data.Migrations.AspNetCoreIdentityDb
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
                 {
-                    b.HasOne("UHub.Web.Models.ApplicationRole", null)
+                    b.HasOne("UHub.Data.Models.ApplicationRole", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -289,7 +321,7 @@ namespace UHub.Web.Data.Migrations.AspNetCoreIdentityDb
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<int>", b =>
                 {
-                    b.HasOne("UHub.Web.Models.ApplicationUser", null)
+                    b.HasOne("UHub.Data.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -298,7 +330,7 @@ namespace UHub.Web.Data.Migrations.AspNetCoreIdentityDb
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<int>", b =>
                 {
-                    b.HasOne("UHub.Web.Models.ApplicationUser", null)
+                    b.HasOne("UHub.Data.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -307,39 +339,39 @@ namespace UHub.Web.Data.Migrations.AspNetCoreIdentityDb
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<int>", b =>
                 {
-                    b.HasOne("UHub.Web.Models.ApplicationUser", null)
+                    b.HasOne("UHub.Data.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("UHub.Web.Models.ApplicationUserRole", b =>
+            modelBuilder.Entity("UHub.Data.Models.ApplicationUserRole", b =>
                 {
-                    b.HasOne("UHub.Web.Models.ApplicationRole", null)
+                    b.HasOne("UHub.Data.Models.ApplicationRole", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("UHub.Web.Models.ApplicationRole", "Role")
+                    b.HasOne("UHub.Data.Models.ApplicationRole", "Role")
                         .WithMany()
                         .HasForeignKey("RoleId1");
 
-                    b.HasOne("UHub.Web.Models.ApplicationUser", null)
+                    b.HasOne("UHub.Data.Models.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("UHub.Web.Models.ApplicationUser", "User")
+                    b.HasOne("UHub.Data.Models.ApplicationUser", "User")
                         .WithMany()
                         .HasForeignKey("UserId1");
                 });
 
-            modelBuilder.Entity("UHub.Web.Models.TaskQueue", b =>
+            modelBuilder.Entity("UHub.Data.Models.TaskQueue", b =>
                 {
-                    b.HasOne("UHub.Web.Models.TaskInfo", "TaskInfo")
+                    b.HasOne("UHub.Data.Models.TaskInfo", "TaskInfo")
                         .WithMany()
                         .HasForeignKey("TaskInfoId")
                         .OnDelete(DeleteBehavior.Cascade)

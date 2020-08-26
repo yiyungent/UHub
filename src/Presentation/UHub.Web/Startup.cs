@@ -2,8 +2,8 @@
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
 
+using System.IO;
 using IdentityServer4;
-using UHub.Web.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -16,6 +16,7 @@ using UHub.Web.BackgroundServices;
 using UHub.Web.Config;
 using UHub.Data;
 using UHub.Data.Models;
+using UHub.Web.Infrastructure;
 
 /// <summary>
 /// 用户信息 使用 ASP.NET Core Identity 存于 EF Core
@@ -42,7 +43,11 @@ namespace UHub.Web
 
             #region 配置 ASP.NET Core Identity 使用 EF Core
             services.AddDbContext<ApplicationDbContext>(options =>
-                    options.UseSqlite(connectionString));
+                    options.UseSqlite(connectionString,
+                        // Fixed Bug EF Migration : Your target project 'UHub.Web' doesn't match your migrations assembly 'UHub.Data'. Either change your target project or change your migrations assembly.
+                        // Change your migrations assembly by using DbContextOptionsBuilder.E.g.options.UseSqlServer(connection, b => b.MigrationsAssembly("UHub.Web")). By default, the migrations assembly is the assembly containing the DbContext.
+                        //Change your target project to the migrations project by using the Package Manager Console's Default project drop-down list, or by executing "dotnet ef" from the directory containing the migrations project.
+                        b => b.MigrationsAssembly("UHub.Web")));
 
             services.AddIdentity<ApplicationUser, ApplicationRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
@@ -85,20 +90,32 @@ namespace UHub.Web
                 });
             #endregion
 
+            #region 配置 IdentityServer4 签名用秘钥
             // not recommended for production - you need to store your key material somewhere secure
-            builder.AddDeveloperSigningCredential();
+            if (Environment.IsDevelopment())
+            {
+                builder.AddDeveloperSigningCredential();
+            }
+            else if (Environment.IsProduction())
+            {
+                string fileName = Path.Combine(Directory.GetCurrentDirectory(), "UHubKey.jwk");
+                builder.AddDeveloperSigningCredential(filename: fileName);
+            }
+            #endregion
 
+            #region 认证配置
             services.AddAuthentication()
-                .AddGoogle(options =>
-                {
-                    options.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
+                   .AddGoogle(options =>
+                   {
+                       options.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
 
-                    // register your IdentityServer with Google at https://console.developers.google.com
-                    // enable the Google+ API
-                    // set the redirect URI to https://localhost:5001/signin-google
-                    options.ClientId = "copy client ID from Google here";
-                    options.ClientSecret = "copy client secret from Google here";
-                });
+                       // register your IdentityServer with Google at https://console.developers.google.com
+                       // enable the Google+ API
+                       // set the redirect URI to https://localhost:5001/signin-google
+                       options.ClientId = "copy client ID from Google here";
+                       options.ClientSecret = "copy client secret from Google here";
+                   });
+            #endregion
 
             // 添加 IOption 配置
             services.AddOptions();
@@ -106,6 +123,9 @@ namespace UHub.Web
 
             // 添加后台任务
             services.AddBackgroundServices();
+
+            // 添加应用通知任务管理器
+            services.AddScoped<AppNoticeTaskManager>();
         }
 
         public void Configure(IApplicationBuilder app)
@@ -119,8 +139,11 @@ namespace UHub.Web
             app.UseStaticFiles();
 
             app.UseRouting();
+
+            // 无需 app.UseAuthentication(); 因为 UseIdentityServer() 内部做了此操作
             app.UseIdentityServer();
             app.UseAuthorization();
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapDefaultControllerRoute();
