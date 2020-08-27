@@ -2,11 +2,18 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using IdentityModel;
+using IdentityServer4;
 using IdentityServer4.EntityFramework.DbContexts;
+using IdentityServer4.EntityFramework.Entities;
 using IdentityServer4.EntityFramework.Mappers;
+using IdentityServer4.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using UHub.Web.Models.Client;
+using UHub.Web.Models.Common;
+using Secret = IdentityServer4.Models.Secret;
 
 namespace UHub.Web.Controllers
 {
@@ -104,6 +111,74 @@ namespace UHub.Web.Controllers
             return View(viewModel);
         }
         #endregion
+
+        #region 创建
+
+        [HttpGet]
+        public IActionResult Create()
+        {
+            ViewData["AllGrantTypes"] = new string[]{
+                "authorization_code",
+                "password",
+                "client_credentials",
+                "implict",
+                "hybrid"
+            };
+
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<ResponseModel>> Create(ClientInputModel inputModel)
+        {
+            ResponseModel responseModel = new ResponseModel();
+
+            try
+            {
+                // TODO: 效验
+                #region 效验
+
+                #endregion
+
+                // InputModel => IdentityServer4.Models
+                IdentityServer4.Models.Client clientModel = new IdentityServer4.Models.Client()
+                {
+                    ClientId = inputModel.ClientId,
+                    ClientName = inputModel.DisplayName,
+                    // TODO: 这里预留, 但视图目前不支持多选, 授权类型始终只能选择一种
+                    AllowedGrantTypes = inputModel.AllowedGrantTypes?.Split(","),
+                    AllowedScopes = inputModel.AllowedScopes?.Split(","),
+                    Description = inputModel.Description,
+                    AllowedCorsOrigins = inputModel.AllowedCorsOrigins?.Split(","),
+                    ClientSecrets = new List<Secret>()
+                    {
+                        new Secret(inputModel.ClientSecret.Sha256())
+                    },
+                    PostLogoutRedirectUris = inputModel.PostLogoutRedirectUris?.Split(","),
+                    RedirectUris = inputModel.RedirectUris?.Split(","),
+                    RequireConsent = inputModel.RequireConsent,
+                    AllowAccessTokensViaBrowser = inputModel.AllowAccessTokensViaBrowser,
+                    AlwaysIncludeUserClaimsInIdToken = inputModel.AlwaysIncludeUserClaimsInIdToken
+                };
+
+                // 保存到数据库
+                await _configurationDbContext.Clients.AddAsync(clientModel.ToEntity());
+                await _configurationDbContext.SaveChangesAsync();
+
+                responseModel.code = 1;
+                responseModel.message = "创建成功 ";
+            }
+            catch (Exception ex)
+            {
+                responseModel.code = -1;
+                responseModel.message = "创建失败: " + ex.Message;
+            }
+
+            return await Task.FromResult(responseModel);
+        }
+        #endregion
+
+
 
         #endregion
 
