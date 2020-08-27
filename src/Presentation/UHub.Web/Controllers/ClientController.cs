@@ -66,7 +66,44 @@ namespace UHub.Web.Controllers
         }
         #endregion
 
+        #region 查看
+        public async Task<IActionResult> Details(int id)
+        {
+            ClientViewModel viewModel = null;
+            // 记得在 .ToModel() 前查询时 Include(), 不然 .ToModel() 关联属性为空
+            var dbModel = await _configurationDbContext.Clients
+                .Include(d => d.AllowedGrantTypes)
+                .Include(d => d.AllowedScopes)
+                .Include(d => d.AllowedCorsOrigins)
+                .Include(d => d.RedirectUris)
+                .Include(d => d.PostLogoutRedirectUris)
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (dbModel != null)
+            {
+                var clientModel = dbModel.ToModel();
+                viewModel = new ClientViewModel
+                {
+                    Id = dbModel.Id,
+                    ClientId = clientModel.ClientId,
+                    AllowedCorsOrigins = clientModel.AllowedCorsOrigins,
+                    Description = clientModel.Description,
+                    PostLogoutRedirectUris = clientModel.PostLogoutRedirectUris,
+                    RequireConsent = clientModel.RequireConsent,
+                    LogoUri = clientModel.LogoUri,
+                    AllowedGrantTypes = clientModel.AllowedGrantTypes,
+                    AllowedScopes = clientModel.AllowedScopes,
+                    AllowAccessTokensViaBrowser = clientModel.AllowAccessTokensViaBrowser,
+                    RedirectUris = clientModel.RedirectUris,
+                    AlwaysIncludeUserClaimsInIdToken = clientModel.AlwaysIncludeUserClaimsInIdToken,
+                    CreateTime = dbModel.Created.ToString("yyyy-MM-dd HH:mm"),
+                    LastUpdateTime = dbModel.Updated?.ToString("yyyy-MM-dd HH:mm") ?? dbModel.Created.ToString("yyyy-MM-dd HH:mm"),
+                    DisplayName = clientModel.ClientName
+                };
+            }
 
+            return View(viewModel);
+        }
+        #endregion
 
         #endregion
 

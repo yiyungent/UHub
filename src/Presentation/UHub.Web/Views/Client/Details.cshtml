@@ -1,0 +1,120 @@
+﻿@model ClientViewModel
+@using UHub.Web.Models.Client
+
+@{ }
+
+<div class="card">
+	<div class="card-body">
+		<div class="btn-group">
+			<a type="button" class="btn btn-primary" asp-controller="Client" asp-action="Index">返回</a>
+		</div>
+		@if (Model != null)
+		{
+			<form>
+				<div class="form-group row">
+					<label class="col-sm-3 col-form-label">Id</label>
+					<div class="col-sm-9">
+						<input type="text" readonly class="form-control-plaintext" value="@Model.Id">
+					</div>
+				</div>
+				<div class="form-group row">
+					<label class="col-sm-3 col-form-label">ClientId</label>
+					<div class="col-sm-9">
+						<input type="text" readonly class="form-control-plaintext" value="@Model.ClientId">
+					</div>
+				</div>
+				<div class="form-group row">
+					<label class="col-sm-3 col-form-label">显示名</label>
+					<div class="col-sm-9">
+						<input type="text" readonly class="form-control-plaintext" value="@Model.DisplayName">
+					</div>
+				</div>
+				<div class="form-group row">
+					<label class="col-sm-3 col-form-label">描述</label>
+					<div class="col-sm-9">
+						<input type="text" readonly class="form-control-plaintext" value="@Model.Description">
+					</div>
+				</div>
+				<div class="form-group">
+					<label>授权类型</label>
+					<div>
+						@foreach (var item in Model.AllowedGrantTypes)
+						{
+							<span class="badge badge-secondary">@item</span>
+						}
+					</div>
+				</div>
+				<div class="form-group">
+					<label>允许范围</label>
+					<div>
+						@foreach (var item in Model.AllowedScopes)
+						{
+							<span class="badge badge-secondary">@item</span>
+						}
+					</div>
+				</div>
+				<div class="form-group">
+					<label>允许跨域</label>
+					<div>
+						@foreach (var item in Model.AllowedCorsOrigins)
+						{
+							<span class="badge badge-secondary">@item</span>
+						}
+					</div>
+				</div>
+				<div class="form-group">
+					<label>登出后跳转地址</label>
+					<div>
+						@foreach (var item in Model.PostLogoutRedirectUris)
+						{
+							<span class="badge badge-secondary">@item</span>
+						}
+					</div>
+				</div>
+				<div class="form-group">
+					<label>登录后跳转地址</label>
+					<div>
+						@foreach (var item in Model.RedirectUris)
+						{
+							<span class="badge badge-secondary">@item</span>
+						}
+					</div>
+				</div>
+				<div class="form-group row">
+					<label class="col-sm-3 col-form-label">需要同意授权</label>
+					<div class="col-sm-9">
+						<input type="text" readonly class="form-control-plaintext" value="@(Model.RequireConsent ? "是" : "否")">
+					</div>
+				</div>
+				<div class="form-group row">
+					<label class="col-sm-3 col-form-label">允许AccessToken经由浏览器传输</label>
+					<div class="col-sm-9">
+						<input type="text" readonly class="form-control-plaintext" value="@(Model.AllowAccessTokensViaBrowser ? "是" : "否")">
+					</div>
+				</div>
+				<div class="form-group row">
+					<label class="col-sm-3 col-form-label">总是包含UserClaims在IdToken中</label>
+					<div class="col-sm-9">
+						<input type="text" readonly class="form-control-plaintext" value="@(Model.AlwaysIncludeUserClaimsInIdToken ? "是" : "否")">
+					</div>
+				</div>
+				<div class="form-group row">
+					<label class="col-sm-3 col-form-label">创建时间</label>
+					<div class="col-sm-9">
+						<input type="text" readonly class="form-control-plaintext" value="@Model.CreateTime">
+					</div>
+				</div>
+				<div class="form-group row">
+					<label class="col-sm-3 col-form-label">最后更新时间</label>
+					<div class="col-sm-9">
+						<input type="text" readonly class="form-control-plaintext" value="@Model.LastUpdateTime">
+					</div>
+				</div>
+			</form>
+		}
+		else
+		{
+			<div class="alert alert-danger" role="alert">找不到此客户端</div>
+		}
+	</div>
+</div>
