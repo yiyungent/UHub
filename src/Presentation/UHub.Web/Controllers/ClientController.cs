@@ -278,7 +278,7 @@ namespace UHub.Web.Controllers
                         Type = "SharedSecret",
                         Value = new Secret(inputModel.ClientSecret.Sha256()).Value
                     });
-                } 
+                }
                 #endregion
 
                 // InputModel => dbModel
@@ -288,7 +288,7 @@ namespace UHub.Web.Controllers
                 dbModel.Description = inputModel.Description;
                 dbModel.RequireConsent = inputModel.RequireConsent;
                 dbModel.AllowAccessTokensViaBrowser = inputModel.AllowAccessTokensViaBrowser;
-                dbModel.AlwaysIncludeUserClaimsInIdToken = inputModel.AlwaysIncludeUserClaimsInIdToken; 
+                dbModel.AlwaysIncludeUserClaimsInIdToken = inputModel.AlwaysIncludeUserClaimsInIdToken;
                 #endregion
 
                 // 关联属性赋值
@@ -357,7 +357,7 @@ namespace UHub.Web.Controllers
                             RedirectUri = q
                         });
                     });
-                } 
+                }
                 #endregion
 
                 // 保存到数据库
@@ -375,6 +375,39 @@ namespace UHub.Web.Controllers
 
             return await Task.FromResult(responseModel);
         }
+        #endregion
+
+        #region 删除
+
+        public async Task<ActionResult<ResponseModel>> Delete(int id)
+        {
+            ResponseModel responseModel = new ResponseModel();
+
+            try
+            {
+                var dbModel = await _configurationDbContext.Clients.FirstOrDefaultAsync(m => m.Id == id);
+                if (dbModel == null)
+                {
+                    responseModel.code = -1;
+                    responseModel.message = "删除失败: 不存在此客户端";
+                    return await Task.FromResult(responseModel);
+                }
+
+                _configurationDbContext.Clients.Remove(dbModel);
+                await _configurationDbContext.SaveChangesAsync();
+
+                responseModel.code = 1;
+                responseModel.message = "删除成功";
+            }
+            catch (Exception ex)
+            {
+                responseModel.code = -1;
+                responseModel.message = "删除失败: " + ex.Message;
+            }
+
+            return await Task.FromResult(responseModel);
+        }
+
         #endregion
 
         #endregion

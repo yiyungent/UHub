@@ -3,6 +3,29 @@
 
 @{ }
 
+<!-- start 删除确认框 -->
+<div id="oneDeleteModal" class="modal fade" tabindex="-1">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title">确认框</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<p>确定要删除吗?</p>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+				<button onclick="oneDeleteSubmit()" type="button" class="btn btn-primary">确定</button>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- end 删除确认框 -->
+<input id="js-id" type="hidden" />
+
 <div>
 	<div class="btn-group">
 		<a type="button" class="btn btn-primary" asp-controller="Client" asp-action="Create">创建</a>
@@ -29,8 +52,8 @@
 					<td>
 						<div class="btn-group">
 							<a class="btn btn-success" href="@Url.Action("Details")?id=@item.Id">查看</a>
-							<button class="btn btn-danger" type="button" onclick="oneDeleteOp(@item.Id)">删除</button>
 							<a class="btn btn-warning" href="@Url.Action("Edit")?id=@item.Id">编辑</a>
+							<button class="btn btn-danger" type="button" onclick="oneDeleteOp(@item.Id)">删除</button>
 						</div>
 					</td>
 				</tr>
@@ -39,3 +62,33 @@
 	</div>
 	<!-- end 简单表格 -->
 </div>
+@section scripts
+{
+	<script>
+		// start 删除
+		function deleteSuccess(data) {
+			if (data.code <= 0) {
+				showMessage(data.message, -1);
+			} else {
+				showMessage(data.message, 1);
+				setTimeout(function () {
+					window.location.reload();
+				}, 500);
+			}
+		}
+		function oneDeleteOp(id) {
+			$("#js-id").val(id);
+			$('#oneDeleteModal').modal();
+		}
+		function oneDeleteSubmit() {
+			var id = $("#js-id").val();
+			$.ajax({
+				type: 'POST',
+				url: '/Client/Delete',
+				data: { id: id },
+				dataType: 'json',
+				success: deleteSuccess
+			});
+		}
+	</script>
+}
