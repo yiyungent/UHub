@@ -7,6 +7,8 @@ namespace UHub.Web.Models.Client
 {
     public class ClientInputModel
     {
+        public int Id { get; set; }
+
         public string ClientId { get; set; }
 
         public string DisplayName { get; set; }
