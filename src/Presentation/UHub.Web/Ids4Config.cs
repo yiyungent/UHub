@@ -23,10 +23,7 @@ namespace UHub.Web
         public static IEnumerable<ApiScope> ApiScopes =>
             new List<ApiScope>
             {
-                new ApiScope("api1", "My API"),
-                new ApiScope("WeatherInfo", "天气信息"),
-                new ApiScope("IdentityInfo", "实体信息"),
-                new ApiScope("WeatherAndIdentity", "天气和实体信息", new string[]{ "WeatherInfo", "IdentityInfo" } )
+                new ApiScope("Remember.Core WebApi", "Remember.Core WebApi")
             };
 
         public static IEnumerable<Client> Clients =>
@@ -66,7 +63,7 @@ namespace UHub.Web
 
                     // In addition to an id_token, an access_token was requested. No claims other than sub are included in the id_token. To obtain more user claims, either use the user info endpoint or set AlwaysIncludeUserClaimsInIdToken on the client configuration.
                     // 开启后, AspNetCoreMvc 通过 User.Claims 能获取更多信息, 列如 profile: family_name...
-                    AlwaysIncludeUserClaimsInIdToken = true
+                    AlwaysIncludeUserClaimsInIdToken = true,
                 },
 
                 new Client
@@ -97,8 +94,8 @@ namespace UHub.Web
 
                  new Client
                 {
-                    ClientId = "Remember.Core",
-                    ClientSecrets = { new Secret("Remember.Core Secret".Sha256()) },
+                    ClientId = "remember-app",
+                    ClientSecrets = { new Secret("remember-app Secret".Sha256()) },
 
                     AllowedGrantTypes = GrantTypes.ResourceOwnerPassword,
                     
@@ -113,10 +110,38 @@ namespace UHub.Web
                     AllowedScopes = new List<string>
                     {
                         IdentityServerConstants.StandardScopes.OpenId,
-                        IdentityServerConstants.StandardScopes.Profile
+                        IdentityServerConstants.StandardScopes.Profile,
+                        "Remember.Core WebApi"
                     },
                     AllowedCorsOrigins = { "https://localhost:5005" }
                 },
+
+                 new Client
+                 {
+                     ClientId = "Remember.Core Admin SPA",
+                     ClientSecrets = { new Secret("Remember.Core Admin SPA Secret".Sha256()) },
+
+                     AllowedGrantTypes = GrantTypes.Implicit,
+
+                     // AccessToken 是否可以通过浏览器返回
+                     AllowAccessTokensViaBrowser = true,
+                    
+                     // where to redirect to after login
+                     RedirectUris = { "https://localhost:5002/signin-oidc" },
+
+                     // where to redirect to after logout
+                     PostLogoutRedirectUris = { "https://localhost:5002/signout-callback-oidc" },
+
+                     AlwaysIncludeUserClaimsInIdToken = true,
+
+                     AllowedScopes = new List<string>
+                     {
+                         IdentityServerConstants.StandardScopes.OpenId,
+                         IdentityServerConstants.StandardScopes.Profile,
+                         "Remember.Core WebApi"
+                     },
+                     AllowedCorsOrigins = { "https://localhost:5005" }
+                 },
             };
     }
 }

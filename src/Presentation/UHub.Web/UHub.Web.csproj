@@ -33,7 +33,6 @@
     <Folder Include="Migrations\AspNetCoreIdentityDb\" />
     <Folder Include="Migrations\IdentityServer\ConfigurationDb\" />
     <Folder Include="Migrations\IdentityServer\PersistedGrantDb\" />
-    <Folder Include="Models\" />
   </ItemGroup>
 
 </Project>

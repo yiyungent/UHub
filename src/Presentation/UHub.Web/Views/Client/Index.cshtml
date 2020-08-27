@@ -1,0 +1,38 @@
+﻿@model IList<ClientViewModel>
+@using UHub.Web.Models.Client
+
+@{ }
+
+<div>
+	<!-- start 简单表格 -->
+	<div class="table-responsive">
+		<table id="js-table" class="table table-hover">
+			<tr>
+				<th>Id</th>
+				<th>ClientId</th>
+				<th>显示名</th>
+				<th>授权类型</th>
+				<th>允许范围</th>
+				<th>操作</th>
+			</tr>
+			@foreach (var item in Model)
+			{
+			<tr data-tr-id="@item.Id">
+				<td>@item.Id</td>
+				<td>@item.ClientId</td>
+				<td>@item.DisplayName</td>
+				<td>@string.Join(",", item.AllowedGrantTypes)</td>
+				<td>@string.Join(",", item.AllowedScopes)</td>
+				<td>
+					<div class="btn-group">
+						<a class="btn btn-success" href="@Url.Action("Details")?id=@item.Id">查看</a>
+						<button class="btn btn-danger" type="button" onclick="oneDeleteOp(@item.Id)">删除</button>
+						<a class="btn btn-warning" href="@Url.Action("Edit")?id=@item.Id">编辑</a>
+					</div>
+				</td>
+			</tr>
+			}
+		</table>
+	</div>
+	<!-- end 简单表格 -->
+</div>
