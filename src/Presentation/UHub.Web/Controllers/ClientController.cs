@@ -145,7 +145,6 @@ namespace UHub.Web.Controllers
                 {
                     ClientId = inputModel.ClientId,
                     ClientName = inputModel.DisplayName,
-                    // TODO: 这里预留, 但视图目前不支持多选, 授权类型始终只能选择一种
                     AllowedGrantTypes = inputModel.AllowedGrantTypes?.Split(","),
                     AllowedScopes = inputModel.AllowedScopes?.Split(","),
                     Description = inputModel.Description,
@@ -293,7 +292,6 @@ namespace UHub.Web.Controllers
 
                 // 关联属性赋值
                 #region 关联属性赋值
-                // TODO: 这里预留, 但视图目前不支持多选, 授权类型始终只能选择一种
                 dbModel.AllowedGrantTypes = new List<ClientGrantType>();
                 if (!string.IsNullOrEmpty(inputModel.AllowedGrantTypes))
                 {
