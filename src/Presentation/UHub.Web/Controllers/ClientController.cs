@@ -123,7 +123,7 @@ namespace UHub.Web.Controllers
                 "authorization_code",
                 "password",
                 "client_credentials",
-                "implict",
+                "implicit",
                 "hybrid"
             };
 
