@@ -126,6 +126,8 @@ namespace UHub.Web.Controllers
                 "implicit",
                 "hybrid"
             };
+            // TODO: 原来不是所有授权类型都能同时支持, 应改为单选, 选项中有固定可行的两种授权类型
+            // TODO: Bug: InvalidOperationException: Grant types list cannot contain both implicit and authorization_code
 
             return View();
         }
