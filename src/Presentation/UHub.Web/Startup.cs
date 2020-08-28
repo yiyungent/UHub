@@ -12,10 +12,13 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Reflection;
+using IdentityModel;
+using Microsoft.AspNetCore.Authorization;
 using UHub.Web.BackgroundServices;
 using UHub.Web.Config;
 using UHub.Data;
 using UHub.Data.Models;
+using UHub.Web.Authorization;
 using UHub.Web.Infrastructure;
 
 /// <summary>
@@ -126,6 +129,15 @@ namespace UHub.Web
 
             // 添加应用通知任务管理器
             services.AddScoped<AppNoticeTaskManager>();
+
+            #region 添加授权-允许哪些人管理后台Admin
+            services.AddSingleton<IAuthorizationHandler, AdminAuthorizationHandler>();
+
+            services.AddAuthorization(options =>
+                {
+                    options.AddPolicy("Admin", policy => policy.Requirements.Add(new AdminRequirement()));
+                });
+            #endregion
         }
 
         public void Configure(IApplicationBuilder app)

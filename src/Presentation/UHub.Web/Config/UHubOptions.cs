@@ -12,5 +12,10 @@ namespace UHub.Web.Config
         public int TaskMaxExecCount { get; set; }
 
         public int TaskExpireAfter { get; set; }
+
+        /// <summary>
+        /// 拥有管理UHub后台功能的用户ID列表
+        /// </summary>
+        public IList<int> AdminUserIds { get; set; }
     }
 }

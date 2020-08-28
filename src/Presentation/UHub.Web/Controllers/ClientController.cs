@@ -8,6 +8,7 @@ using IdentityServer4.EntityFramework.DbContexts;
 using IdentityServer4.EntityFramework.Entities;
 using IdentityServer4.EntityFramework.Mappers;
 using IdentityServer4.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Protocols.OpenIdConnect;
@@ -17,6 +18,7 @@ using Secret = IdentityServer4.Models.Secret;
 
 namespace UHub.Web.Controllers
 {
+    [Authorize("Admin")]
     public class ClientController : Controller
     {
         #region Fields
