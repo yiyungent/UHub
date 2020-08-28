@@ -135,7 +135,13 @@ namespace UHub.Web
 
             services.AddAuthorization(options =>
                 {
-                    options.AddPolicy("Admin", policy => policy.Requirements.Add(new AdminRequirement()));
+                    options.AddPolicy("Admin",
+                        policy =>
+                        {
+                            policy.RequireAuthenticatedUser();
+                            policy.Requirements.Add(new AdminRequirement());
+                        }
+                    );
                 });
             #endregion
         }
