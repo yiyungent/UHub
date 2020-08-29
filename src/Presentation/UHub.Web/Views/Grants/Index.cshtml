@@ -2,8 +2,8 @@
 
 <div class="grants-page">
     <div class="lead">
-        <h1>Client Application Permissions</h1>
-        <p>Below is the list of applications you have given permission to and the resources they have access to.</p>
+        <h1>客户端应用授权</h1>
+        <p>以下是你授予许可的应用程序及其访问资源的列表。</p>
     </div>
 
     @if (Model.Grants.Any() == false)
@@ -11,7 +11,7 @@
         <div class="row">
             <div class="col-sm-8">
                 <div class="alert alert-info">
-                    You have not given access to any applications
+	                你尚未授予访问任何应用程序的权限
                 </div>
             </div>
         </div>
@@ -34,7 +34,7 @@
                         <div class="col-sm-2">
                             <form asp-action="Revoke">
                                 <input type="hidden" name="clientId" value="@grant.ClientId">
-                                <button class="btn btn-danger">Revoke Access</button>
+                                <button class="btn btn-danger">撤销授权</button>
                             </form>
                         </div>
                     </div>
@@ -44,22 +44,22 @@
                     @if (grant.Description != null)
                     {
                         <li class="list-group-item">
-                            <label>Description:</label> @grant.Description
+                            <label>描述:</label> @grant.Description
                         </li>   
                     }
                     <li class="list-group-item">
-                        <label>Created:</label> @grant.Created.ToString("yyyy-MM-dd")
+                        <label>授权时间:</label> @grant.Created.ToString("yyyy-MM-dd")
                     </li>
                     @if (grant.Expires.HasValue)
                     {
                         <li class="list-group-item">
-                            <label>Expires:</label> @grant.Expires.Value.ToString("yyyy-MM-dd")
+                            <label>授权过期:</label> @grant.Expires.Value.ToString("yyyy-MM-dd")
                         </li>
                     }
                     @if (grant.IdentityGrantNames.Any())
                     {
                         <li class="list-group-item">
-                            <label>Identity Grants</label>
+                            <label>身份授权</label>
                             <ul>
                                 @foreach (var name in grant.IdentityGrantNames)
                                 {
@@ -71,7 +71,7 @@
                     @if (grant.ApiGrantNames.Any())
                     {
                         <li class="list-group-item">
-                            <label>API Grants</label>
+                            <label>API授权</label>
                             <ul>
                                 @foreach (var name in grant.ApiGrantNames)
                                 {
