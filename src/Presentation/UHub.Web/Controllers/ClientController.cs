@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using IdentityModel;
 using IdentityServer4;
 using IdentityServer4.EntityFramework.DbContexts;
 using IdentityServer4.EntityFramework.Entities;
@@ -11,7 +10,6 @@ using IdentityServer4.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Protocols.OpenIdConnect;
 using UHub.Web.Models.Client;
 using UHub.Web.Models.Common;
 using Secret = IdentityServer4.Models.Secret;
@@ -145,7 +143,8 @@ namespace UHub.Web.Controllers
                     AlwaysIncludeUserClaimsInIdToken = clientModel.AlwaysIncludeUserClaimsInIdToken,
                     CreateTime = dbModel.Created.ToString("yyyy-MM-dd HH:mm"),
                     LastUpdateTime = dbModel.Updated?.ToString("yyyy-MM-dd HH:mm") ?? dbModel.Created.ToString("yyyy-MM-dd HH:mm"),
-                    DisplayName = clientModel.ClientName
+                    DisplayName = clientModel.ClientName,
+                    AllowOfflineAccess = clientModel.AllowOfflineAccess
                 };
             }
 
@@ -204,11 +203,15 @@ namespace UHub.Web.Controllers
                     RedirectUris = inputModel.RedirectUris?.Split(","),
                     RequireConsent = inputModel.RequireConsent,
                     AllowAccessTokensViaBrowser = inputModel.AllowAccessTokensViaBrowser,
-                    AlwaysIncludeUserClaimsInIdToken = inputModel.AlwaysIncludeUserClaimsInIdToken
+                    AlwaysIncludeUserClaimsInIdToken = inputModel.AlwaysIncludeUserClaimsInIdToken,
+                    AllowOfflineAccess = inputModel.AllowOfflineAccess
                 };
 
                 // 保存到数据库
-                await _configurationDbContext.Clients.AddAsync(clientModel.ToEntity());
+                var dbModel = clientModel.ToEntity();
+                // TODO: 注意: 1.发现使用 DateTime.UtcNow 时间不正确，不知道为什么，明明推荐用这个统一时间 2.就算不手动赋值, 最后也会有创建时间, 更新时间, 而内部用的就是UtcNow
+                dbModel.Created = DateTime.Now;
+                await _configurationDbContext.Clients.AddAsync(dbModel);
                 await _configurationDbContext.SaveChangesAsync();
 
                 responseModel.code = 1;
@@ -255,7 +258,8 @@ namespace UHub.Web.Controllers
                     AlwaysIncludeUserClaimsInIdToken = clientModel.AlwaysIncludeUserClaimsInIdToken,
                     CreateTime = dbModel.Created.ToString("yyyy-MM-dd HH:mm"),
                     LastUpdateTime = dbModel.Updated?.ToString("yyyy-MM-dd HH:mm") ?? dbModel.Created.ToString("yyyy-MM-dd HH:mm"),
-                    DisplayName = clientModel.ClientName
+                    DisplayName = clientModel.ClientName,
+                    AllowOfflineAccess = clientModel.AllowOfflineAccess
                 };
 
             }
@@ -325,7 +329,7 @@ namespace UHub.Web.Controllers
                     dbModel.ClientSecrets.Add(new ClientSecret()
                     {
                         ClientId = dbModel.Id,
-                        Created = DateTime.UtcNow,
+                        Created = DateTime.Now,
                         Type = "SharedSecret",
                         Value = new Secret(inputModel.ClientSecret.Sha256()).Value
                     });
@@ -340,6 +344,8 @@ namespace UHub.Web.Controllers
                 dbModel.RequireConsent = inputModel.RequireConsent;
                 dbModel.AllowAccessTokensViaBrowser = inputModel.AllowAccessTokensViaBrowser;
                 dbModel.AlwaysIncludeUserClaimsInIdToken = inputModel.AlwaysIncludeUserClaimsInIdToken;
+                dbModel.AllowOfflineAccess = inputModel.AllowOfflineAccess;
+                dbModel.Updated = DateTime.Now;
                 #endregion
 
                 // 关联属性赋值

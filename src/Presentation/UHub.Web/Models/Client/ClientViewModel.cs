@@ -58,5 +58,11 @@ namespace UHub.Web.Models.Client
         /// 是否需要同意授权页面
         /// </summary>
         public bool RequireConsent { get; set; }
+
+        /// <summary>
+        /// 是否需要 RefreshToken
+        /// PS: 允许离线访问即返回 RefreshToken, 用于刷新 AccessToken
+        /// </summary>
+        public bool AllowOfflineAccess { get; set; }
     }
 }
