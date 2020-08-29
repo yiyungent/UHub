@@ -1,4 +1,6 @@
 ﻿@using IdentityServer4.Extensions
+@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService AuthorizationService
 
 @{
     string name = null;
@@ -6,6 +8,12 @@
     {
         name = Context.User?.GetDisplayName();
     }
+	bool isAdmin = false;
+	if (!string.IsNullOrWhiteSpace(name))
+	{
+        // 已登录 -> 效验是否有权限
+		isAdmin = (await AuthorizationService.AuthorizeAsync(User, "Admin")).Succeeded;
+	}
 }
 
 <div class="nav-page">
@@ -13,7 +21,7 @@
 
         <a href="~/" class="navbar-brand">
             <img src="~/icon.png" class="icon-banner">
-            IdentityServer4
+            UHub
         </a>
 
         @if (!string.IsNullOrWhiteSpace(name))
@@ -22,9 +30,13 @@
                 <li class="nav-item dropdown">
                     <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">@name <b class="caret"></b></a>
                     
-                    <div class="dropdown-menu">
-                        <a class="dropdown-item" asp-action="Logout" asp-controller="Account">Logout</a>
-                    </div>
+	                <div class="dropdown-menu">
+                        @if (isAdmin)
+                        {
+						<a class="dropdown-item" asp-action="Index" asp-controller="Client">客户端管理</a>
+                        }
+		                <a class="dropdown-item" asp-action="Logout" asp-controller="Account">退出</a>
+	                </div>
               </li>
             </ul>
         }

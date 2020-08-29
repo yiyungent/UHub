@@ -1,32 +1,31 @@
-@using System.Diagnostics
+﻿@using System.Diagnostics
 
 @{
-    var version = FileVersionInfo.GetVersionInfo(typeof(IdentityServer4.Hosting.IdentityServerMiddleware).Assembly.Location).ProductVersion.Split('+').First();
+    var version = FileVersionInfo.GetVersionInfo(typeof(UHub.Web.Startup).Assembly.Location).ProductVersion.Split('+').First();
 }
 
 <div class="welcome-page">
     <h1>
         <img src="~/icon.jpg">
-        Welcome to IdentityServer4
+        Welcome to UHub
         <small class="text-muted">(version @version)</small>
     </h1>
 
     <ul>
         <li>
-            IdentityServer publishes a
-            <a href="~/.well-known/openid-configuration">discovery document</a>
-            where you can find metadata and links to all the endpoints, key material, etc.
+            UHub 发布了一个
+            <a href="~/.well-known/openid-configuration">发现文档</a>
+            你可以在其中找到需要的数据以及端点，关键信息的链接，你可以利用它们接入你的客户端。
         </li>
         <li>
-            Click <a href="~/diagnostics">here</a> to see the claims for your current session.
+            点击 <a href="~/diagnostics">这里</a> 查看你当前会话的Claims。
         </li>
         <li>
-            Click <a href="~/grants">here</a> to manage your stored grants.
+            点击 <a href="~/grants">这里</a> 管理你的授权。
         </li>
         <li>
-            Here are links to the
-            <a href="https://github.com/identityserver/IdentityServer4">source code repository</a>,
-            and <a href="https://github.com/IdentityServer/IdentityServer4/tree/main/samples">ready to use samples</a>.
+            <a href="https://github.com/yiyungent/UHub" target="_blank">GitHub</a>,
+	        UHub © <a href="https://github.com/yiyungent" target="_blank">yiyun</a>, Released under the Apache-2.0 License.
         </li>
     </ul>
 </div>
