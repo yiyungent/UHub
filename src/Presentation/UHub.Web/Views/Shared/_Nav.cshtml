@@ -14,31 +14,52 @@
         // 已登录 -> 效验是否有权限
 		isAdmin = (await AuthorizationService.AuthorizeAsync(User, "Admin")).Succeeded;
 	}
+	string webName = "UHub";
 }
 
 <div class="nav-page">
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
 
         <a href="~/" class="navbar-brand">
             <img src="~/icon.png" class="icon-banner">
-            UHub
+            @webName
         </a>
 
         @if (!string.IsNullOrWhiteSpace(name))
         {
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item dropdown">
-                    <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">@name <b class="caret"></b></a>
+	        <a class="navbar-brand ml-auto" href="#">
+		        @* TODO: 登录用户头像 *@
+		        <img src="~/images/guest-avatar.jpg" width="30" height="30" alt="" loading="lazy">
+	        </a>
+	        <ul class="navbar-nav mr-5">
+		        <li class="nav-item dropdown">
+			        <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">@name <b class="caret"></b></a>
                     
-	                <div class="dropdown-menu">
-                        @if (isAdmin)
-                        {
-						<a class="dropdown-item" asp-action="Index" asp-controller="Client">客户端管理</a>
-                        }
-		                <a class="dropdown-item" asp-action="Logout" asp-controller="Account">退出</a>
-	                </div>
-              </li>
-            </ul>
+			        <div class="dropdown-menu">
+				        <a class="dropdown-item" asp-action="Index" asp-controller="Grants">授权管理</a>
+				        @if (isAdmin)
+				        {
+					        <a class="dropdown-item" asp-action="Index" asp-controller="Client">客户端管理</a>
+				        }
+				        <div class="dropdown-divider"></div>
+				        <a class="dropdown-item" asp-action="Logout" asp-controller="Account">退出</a>
+			        </div>
+		        </li>
+	        </ul>
+        }
+        else
+        {
+			<a class="navbar-brand ml-auto" asp-action="Login" asp-controller="Account">
+				<img src="~/images/guest-avatar.jpg" width="30" height="30" alt="" loading="lazy">
+			</a>
+			<ul class="navbar-nav mr-5">
+				<li class="nav-item">
+					<a class="nav-link" asp-action="Login" asp-controller="Account">登录</a>
+				</li>
+				<li class="nav-item">
+					<a href="#" class="nav-link">注册</a>
+				</li>
+			</ul>
         }
     
     </nav>
