@@ -1,8 +1,8 @@
 ﻿@using UHub.Web.Models.Client
 
 @{
-
 	string[] allGrantTypes = (string[])ViewData["AllGrantTypes"];
+	string[] allScopes = (string[])ViewData["AllScopes"];
 }
 
 <div class="card">
@@ -38,12 +38,16 @@
 			</div>
 			<div class="form-group">
 				<label>授权类型</label>
-				<div>参考: @string.Join(",", allGrantTypes)</div>
-				<textarea name="AllowedGrantTypes" class="form-control" rows="3" placeholder="多个之间用,隔开"></textarea>
+				<select name="AllowedGrantTypes" class="form-control">
+					@foreach (var item in allGrantTypes)
+					{
+						<option value="@item">@item</option>
+					}
+				</select>
 			</div>
 			<div class="form-group">
 				<label>允许范围</label>
-				<div>参考: openid,profile</div>
+				<div>参考: @string.Join(",", allScopes)</div>
 				<textarea name="AllowedScopes" class="form-control" rows="3" placeholder="多个之间用,隔开"></textarea>
 			</div>
 			<div class="form-group">
@@ -51,12 +55,12 @@
 				<textarea name="AllowedCorsOrigins" class="form-control" rows="3" placeholder="多个之间用,隔开"></textarea>
 			</div>
 			<div class="form-group">
-				<label>登出后跳转地址</label>
-				<textarea name="PostLogoutRedirectUris" class="form-control" rows="3" placeholder="多个之间用,隔开"></textarea>
+				<label>登录回调地址</label>
+				<textarea name="RedirectUris" class="form-control" rows="3" placeholder="多个之间用,隔开"></textarea>
 			</div>
 			<div class="form-group">
-				<label>登录后跳转地址</label>
-				<textarea name="RedirectUris" class="form-control" rows="3" placeholder="多个之间用,隔开"></textarea>
+				<label>登出回调地址</label>
+				<textarea name="PostLogoutRedirectUris" class="form-control" rows="3" placeholder="多个之间用,隔开"></textarea>
 			</div>
 			<div class="form-group row">
 				<label class="col-sm-3 col-form-label">需要同意授权</label>

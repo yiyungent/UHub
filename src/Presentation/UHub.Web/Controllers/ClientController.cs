@@ -27,6 +27,45 @@ namespace UHub.Web.Controllers
 
         #endregion
 
+        #region Properties
+
+        public string[] AllGrantTypes
+        {
+            get
+            {
+                return new string[]{
+                    string.Join(",",IdentityServer4.Models.GrantTypes.Code),
+                    string.Join(",",IdentityServer4.Models.GrantTypes.CodeAndClientCredentials),
+                    string.Join(",",IdentityServer4.Models.GrantTypes.Implicit),
+                    string.Join(",",IdentityServer4.Models.GrantTypes.ImplicitAndClientCredentials),
+                    string.Join(",", IdentityServer4.Models.GrantTypes.Hybrid),
+                    string.Join(",",IdentityServer4.Models.GrantTypes.HybridAndClientCredentials),
+                    string.Join(",",IdentityServer4.Models.GrantTypes.ResourceOwnerPassword),
+                    string.Join(",",IdentityServer4.Models.GrantTypes.ResourceOwnerPasswordAndClientCredentials),
+                    string.Join(",",IdentityServer4.Models.GrantTypes.ClientCredentials),
+                    // TODO: Bug: 这个值为, 不知道干啥的 urn:ietf:params:oauth:grant-type:device_code
+                    //string.Join(",",IdentityServer4.Models.GrantTypes.DeviceFlow),
+                };
+            }
+        }
+
+        public string[] AllScopes
+        {
+            get
+            {
+                return new string[]{
+                    IdentityServerConstants.StandardScopes.OpenId,
+                    IdentityServerConstants.StandardScopes.Profile,
+                    IdentityServerConstants.StandardScopes.Address,
+                    IdentityServerConstants.StandardScopes.Email,
+                    IdentityServerConstants.StandardScopes.Phone,
+                    IdentityServerConstants.StandardScopes.OfflineAccess,
+                };
+            }
+        }
+
+        #endregion
+
         #region Ctor
 
         public ClientController(ConfigurationDbContext configurationDbContext)
@@ -119,15 +158,10 @@ namespace UHub.Web.Controllers
         [HttpGet]
         public IActionResult Create()
         {
-            ViewData["AllGrantTypes"] = new string[]{
-                "authorization_code",
-                "password",
-                "client_credentials",
-                "implicit",
-                "hybrid"
-            };
-            // TODO: 原来不是所有授权类型都能同时支持, 应改为单选, 选项中有固定可行的两种授权类型
-            // TODO: Bug: InvalidOperationException: Grant types list cannot contain both implicit and authorization_code
+            // 注意: 不是所有授权类型都能同时支持, 应改为单选, 选项中有固定可行的单配方案(eg: CodeAndClientCredentials)
+            // Fixed Bug: InvalidOperationException: Grant types list cannot contain both implicit and authorization_code
+            ViewData["AllGrantTypes"] = AllGrantTypes;
+            ViewData["AllScopes"] = AllScopes;
 
             return View();
         }
@@ -141,6 +175,15 @@ namespace UHub.Web.Controllers
             {
                 // TODO: 效验
                 #region 效验
+                // 1.授权类型只能来自选项
+                // eg: 若选项是两项: CodeAndClientCredentials => authorization_code,client_credentials
+                string selectedGrantTypes = inputModel.AllowedGrantTypes;
+                if (!AllGrantTypes.Contains(selectedGrantTypes))
+                {
+                    responseModel.code = -1;
+                    responseModel.message = "创建失败: 不存在此授权类型";
+                    return await Task.FromResult(responseModel);
+                }
 
                 #endregion
 
@@ -217,13 +260,8 @@ namespace UHub.Web.Controllers
 
             }
 
-            ViewData["AllGrantTypes"] = new string[]{
-                "authorization_code",
-                "password",
-                "client_credentials",
-                "implict",
-                "hybrid"
-            };
+            ViewData["AllGrantTypes"] = AllGrantTypes;
+            ViewData["AllScopes"] = AllScopes;
 
             return View(viewModel);
         }
@@ -242,6 +280,16 @@ namespace UHub.Web.Controllers
                 {
                     responseModel.code = -1;
                     responseModel.message = "更新失败: 不存在此客户端";
+                    return await Task.FromResult(responseModel);
+                }
+
+                // 授权类型只能来自选项
+                // eg: 若选项是两项: CodeAndClientCredentials => authorization_code,client_credentials
+                string selectedGrantTypes = inputModel.AllowedGrantTypes;
+                if (!AllGrantTypes.Contains(selectedGrantTypes))
+                {
+                    responseModel.code = -1;
+                    responseModel.message = "编辑失败: 不存在此授权类型";
                     return await Task.FromResult(responseModel);
                 }
                 #endregion

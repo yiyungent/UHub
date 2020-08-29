@@ -54,7 +54,7 @@
 					</div>
 				</div>
 				<div class="form-group">
-					<label>允许跨域</label>
+					<label>跨域白名单</label>
 					<div>
 						@foreach (var item in Model.AllowedCorsOrigins)
 						{
@@ -63,18 +63,18 @@
 					</div>
 				</div>
 				<div class="form-group">
-					<label>登出后跳转地址</label>
+					<label>登录回调地址</label>
 					<div>
-						@foreach (var item in Model.PostLogoutRedirectUris)
+						@foreach (var item in Model.RedirectUris)
 						{
 							<span class="badge badge-secondary">@item</span>
 						}
 					</div>
 				</div>
 				<div class="form-group">
-					<label>登录后跳转地址</label>
+					<label>登出回调地址</label>
 					<div>
-						@foreach (var item in Model.RedirectUris)
+						@foreach (var item in Model.PostLogoutRedirectUris)
 						{
 							<span class="badge badge-secondary">@item</span>
 						}
