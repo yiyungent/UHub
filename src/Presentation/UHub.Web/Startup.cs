@@ -21,6 +21,7 @@ using UHub.Data;
 using UHub.Data.Models;
 using UHub.Web.Authorization;
 using UHub.Web.Extensions;
+using UHub.Web.Extensions.Account;
 using UHub.Web.Infrastructure;
 
 /// <summary>
@@ -110,16 +111,7 @@ namespace UHub.Web
 
             #region »œ÷§≈‰÷√
             services.AddAuthentication()
-                   .AddGoogle(options =>
-                   {
-                       options.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
-
-                       // register your IdentityServer with Google at https://console.developers.google.com
-                       // enable the Google+ API
-                       // set the redirect URI to https://localhost:5001/signin-google
-                       options.ClientId = "copy client ID from Google here";
-                       options.ClientSecret = "copy client secret from Google here";
-                   });
+                .AddExternalLogin(Configuration);
             #endregion
 
             // ≈‰÷√SameSiteCookie≤ﬂ¬‘
