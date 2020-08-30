@@ -1,31 +1,41 @@
 ﻿@using System.Diagnostics
+@using Microsoft.AspNetCore.Hosting
+@using Microsoft.Extensions.Hosting
+@inject IWebHostEnvironment Environment
 
 @{
     var version = FileVersionInfo.GetVersionInfo(typeof(UHub.Web.Startup).Assembly.Location).ProductVersion.Split('+').First();
 }
 
 <div class="welcome-page">
-    <h1>
-        <img src="~/icon.jpg">
-        Welcome to UHub
-        <small class="text-muted">(version @version)</small>
-    </h1>
+	<h1>
+		<img src="~/icon.jpg">
+		Welcome to UHub
+		<small class="text-muted">(version @version)</small>
+	</h1>
 
-    <ul>
-        <li>
-            UHub 发布了一个
-            <a href="~/.well-known/openid-configuration">发现文档</a>
-            你可以在其中找到需要的数据以及端点，关键信息的链接，你可以利用它们接入你的客户端。
-        </li>
-        <li>
-            点击 <a href="~/diagnostics">这里</a> 查看你当前会话的Claims。
-        </li>
-        <li>
-            点击 <a href="~/grants">这里</a> 管理你的授权。
-        </li>
-        <li>
-            <a href="https://github.com/yiyungent/UHub" target="_blank">GitHub</a>,
-	        UHub © <a href="https://github.com/yiyungent" target="_blank">yiyun</a>, Released under the Apache-2.0 License.
-        </li>
-    </ul>
+	<ul>
+		<li>
+			UHub 发布了一个
+			<a href="~/.well-known/openid-configuration">发现文档</a>
+			你可以在其中找到需要的数据以及端点，关键信息的链接，你可以利用它们接入你的客户端。
+		</li>
+		@if (Environment.IsDevelopment())
+		{
+			<li>
+				点击 <a href="~/diagnostics">这里</a> 查看你当前会话的Claims。
+			</li>
+		}
+		<li>
+			点击 <a href="~/grants">这里</a> 管理你的授权。
+		</li>
+	</ul>
+</div>
+<div>
+	<div>
+		<a href="https://github.com/yiyungent/UHub" target="_blank">GitHub</a>
+	</div>
+	<div>
+		UHub © <a href="https://github.com/yiyungent" target="_blank">yiyun</a>, Released under the Apache-2.0 License.
+	</div>
 </div>
