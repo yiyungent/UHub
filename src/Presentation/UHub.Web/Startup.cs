@@ -14,11 +14,13 @@ using Microsoft.Extensions.Hosting;
 using System.Reflection;
 using IdentityModel;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using UHub.Web.BackgroundServices;
 using UHub.Web.Config;
 using UHub.Data;
 using UHub.Data.Models;
 using UHub.Web.Authorization;
+using UHub.Web.Extensions;
 using UHub.Web.Infrastructure;
 
 /// <summary>
@@ -120,6 +122,9 @@ namespace UHub.Web
                    });
             #endregion
 
+            // 配置SameSiteCookie策略
+            services.AddSameSiteCookiePolicy();
+
             // 添加 IOption 配置
             services.AddOptions();
             services.Configure<UHubOptions>(Configuration.GetSection("UHub"));
@@ -158,6 +163,8 @@ namespace UHub.Web
 
             app.UseRouting();
 
+            // UseCookiePolicy(): Before UseAuthentication or anything else that writes cookies.
+            app.UseCookiePolicy();
             // 无需 app.UseAuthentication(); 因为 UseIdentityServer() 内部做了此操作
             app.UseIdentityServer();
             app.UseAuthorization();
