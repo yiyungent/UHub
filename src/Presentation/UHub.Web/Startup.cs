@@ -101,7 +101,7 @@ namespace UHub.Web
             }
             else if (Environment.IsProduction())
             {
-                string fileName = Path.Combine(Directory.GetCurrentDirectory(), "UHubKey.jwk");
+                string fileName = Path.Combine(Directory.GetCurrentDirectory(), "App_Data", "UHubKey.jwk");
                 builder.AddDeveloperSigningCredential(filename: fileName);
             }
             #endregion
