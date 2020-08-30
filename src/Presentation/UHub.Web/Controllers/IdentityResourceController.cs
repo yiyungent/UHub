@@ -60,6 +60,36 @@ namespace UHub.Web.Controllers
         }
         #endregion
 
+        #region 查看
+        public async Task<IActionResult> Details(int id)
+        {
+            IdentityResourceViewModel viewModel = null;
+            // 记得在 .ToModel() 前查询时 Include(), 不然 .ToModel() 关联属性为空
+            var dbModel = await _configurationDbContext.IdentityResources
+                .Include(d => d.UserClaims)
+                .Include(d => d.Properties)
+                .FirstOrDefaultAsync(m => m.Id == id);
+            if (dbModel != null)
+            {
+                var identityResourceModel = dbModel.ToModel();
+                viewModel = new IdentityResourceViewModel
+                {
+                    Id = dbModel.Id,
+                    Name = identityResourceModel.Name,
+                    DisplayName = identityResourceModel.DisplayName,
+                    Description = identityResourceModel.Description,
+                    Required = identityResourceModel.Required,
+                    ShowInDiscoveryDocument = identityResourceModel.ShowInDiscoveryDocument,
+                    UserClaims = identityResourceModel.UserClaims,
+                    CreateTime = dbModel.Created.ToString("yyyy-MM-dd HH:mm"),
+                    LastUpdateTime = dbModel.Updated?.ToString("yyyy-MM-dd HH:mm") ?? dbModel.Created.ToString("yyyy-MM-dd HH:mm"),
+                };
+            }
+
+            return View(viewModel);
+        }
+        #endregion
+
         #endregion
     }
 }
