@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace UHub.Core
+namespace UHubApi.AspNetCore
 {
     public class EncryptHelper
     {

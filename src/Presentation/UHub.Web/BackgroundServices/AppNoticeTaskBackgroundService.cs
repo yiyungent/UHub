@@ -60,7 +60,7 @@ namespace UHub.Web.BackgroundServices
                         string appBaseUrl = appInfo?.BaseUrl;
                         var taskParameterModel = new AppNoticeTaskParameterModel()
                         {
-                            AppUrl = appBaseUrl + "/" + taskInfo.Name,
+                            AppUrl = appBaseUrl + "/api/UHub/" + taskInfo.Name,
                             AppSecret = appInfo.AppSecret,
                             PostData = dataModel.PostData
                         };
