@@ -11,23 +11,14 @@ using Microsoft.AspNetCore.Routing.Matching;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
+using Serilog;
 
 namespace UHub.Web.Controllers
 {
     public class InstallController : Controller
     {
         #region Fields
-        /// <summary>
-        /// ConfigurationDbContext - used for configuration data such as clients, resources, and scopes
-        /// </summary>
-        private readonly PersistedGrantDbContext _persistedGrantDbContext;
-
-        /// <summary>
-        /// PersistedGrantDbContext - used for temporary operational data such as authorization codes, and refresh tokens
-        /// </summary>
-        private readonly ConfigurationDbContext _configurationDbContext;
-
-        private readonly IConfiguration _configuration;
+        private readonly DbInitializer _dbInitializer;
         #endregion
 
         #region Properties
@@ -79,63 +70,39 @@ namespace UHub.Web.Controllers
         #endregion
 
         #region Ctor
-        public InstallController(PersistedGrantDbContext persistedGrantDbContext, ConfigurationDbContext configurationDbContext, IConfiguration configuration, IWebHostEnvironment environment)
+        public InstallController(DbInitializer dbInitializer, IWebHostEnvironment environment)
         {
-            _persistedGrantDbContext = persistedGrantDbContext;
-            _configurationDbContext = configurationDbContext;
-            _configuration = configuration;
-            Environment = environment;
+            this._dbInitializer = dbInitializer;
+            this.Environment = environment;
         }
         #endregion
 
+        #region Actions
         public IActionResult Index()
         {
             if (IsInstalled)
             {
+                Log.Debug("已安装, 若需重新安装, 请删除 App_Data/install.lock");
                 return Json(new { message = "已安装, 若需重新安装, 请删除 App_Data/install.lock" });
             }
 
-            #region ASP.NET Core Identity 用户信息 初始化
-            string connStr = _configuration.GetConnectionString("DefaultConnection");
-            SeedData.EnsureSeedData(connStr);
-            #endregion
-
-            #region IdentityServer4 客户端等配置信息 初始化
-            _configurationDbContext.Database.Migrate();
-            _persistedGrantDbContext.Database.Migrate();
-
-            var context = _configurationDbContext;
-            if (!context.Clients.Any())
+            try
             {
-                foreach (var client in Ids4Config.Clients)
-                {
-                    context.Clients.Add(client.ToEntity());
-                }
-                context.SaveChanges();
-            }
+                Log.Debug("开始安装");
 
-            if (!context.IdentityResources.Any())
+                this._dbInitializer.Initialize();
+
+                IsInstalled = true;
+                Log.Debug("安装成功");
+            }
+            catch (Exception e)
             {
-                foreach (var resource in Ids4Config.IdentityResources)
-                {
-                    context.IdentityResources.Add(resource.ToEntity());
-                }
-                context.SaveChanges();
+                IsInstalled = false;
+                Log.Debug(e, "安装失败");
             }
-
-            if (!context.ApiScopes.Any())
-            {
-                foreach (var resource in Ids4Config.ApiScopes)
-                {
-                    context.ApiScopes.Add(resource.ToEntity());
-                }
-                context.SaveChanges();
-            }
-            #endregion
-
-            IsInstalled = true;
 
             return Json(new { message = "安装成功" });
         }
+        #endregion
     }
 }

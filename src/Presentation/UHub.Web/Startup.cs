@@ -49,11 +49,7 @@ namespace UHub.Web
 
             #region 配置 ASP.NET Core Identity 使用 EF Core
             services.AddDbContext<ApplicationDbContext>(options =>
-                    options.UseSqlite(connectionString,
-                        // Fixed Bug EF Migration : Your target project 'UHub.Web' doesn't match your migrations assembly 'UHub.Data'. Either change your target project or change your migrations assembly.
-                        // Change your migrations assembly by using DbContextOptionsBuilder.E.g.options.UseSqlServer(connection, b => b.MigrationsAssembly("UHub.Web")). By default, the migrations assembly is the assembly containing the DbContext.
-                        //Change your target project to the migrations project by using the Package Manager Console's Default project drop-down list, or by executing "dotnet ef" from the directory containing the migrations project.
-                        b => b.MigrationsAssembly("UHub.Web")));
+                    options.UseSqlite(connectionString));
 
             services.AddIdentity<ApplicationUser, ApplicationRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
@@ -61,8 +57,6 @@ namespace UHub.Web
             #endregion
 
             #region 配置 IdentityServer4 使用 EF Core
-            var migrationsAssembly = typeof(Startup).GetTypeInfo().Assembly.GetName().Name;
-
             var builder = services.AddIdentityServer(options =>
             {
                 options.Events.RaiseErrorEvents = true;
@@ -85,14 +79,12 @@ namespace UHub.Web
                 // ConfigurationDbContext - used for configuration data such as clients, resources, and scopes
                 .AddConfigurationStore(options =>
                 {
-                    options.ConfigureDbContext = b => b.UseSqlite(connectionString,
-                        sql => sql.MigrationsAssembly(migrationsAssembly));
+                    options.ConfigureDbContext = b => b.UseSqlite(connectionString);
                 })
                 // PersistedGrantDbContext - used for temporary operational data such as authorization codes, and refresh tokens
                 .AddOperationalStore(options =>
                 {
-                    options.ConfigureDbContext = b => b.UseSqlite(connectionString,
-                        sql => sql.MigrationsAssembly(migrationsAssembly));
+                    options.ConfigureDbContext = b => b.UseSqlite(connectionString);
                 });
             #endregion
 
@@ -126,6 +118,9 @@ namespace UHub.Web
 
             // 添加应用通知任务管理器
             services.AddScoped<AppNoticeTaskManager>();
+
+            // 添加数据库初始化器
+            services.AddScoped<DbInitializer>();
 
             #region 添加授权-允许哪些人管理后台Admin
             services.AddSingleton<IAuthorizationHandler, AdminAuthorizationHandler>();

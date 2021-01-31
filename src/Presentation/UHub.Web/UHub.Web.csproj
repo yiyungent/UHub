@@ -30,18 +30,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Migrations\AspNetCoreIdentityDb\" />
-    <Folder Include="Migrations\IdentityServer\ConfigurationDb\" />
-    <Folder Include="Migrations\IdentityServer\PersistedGrantDb\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Update="UHub.db">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Update="App_Data\UHubKey.jwk">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="DB\" />
   </ItemGroup>
 
 </Project>
