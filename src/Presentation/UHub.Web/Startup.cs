@@ -49,7 +49,8 @@ namespace UHub.Web
 
             #region 配置 ASP.NET Core Identity 使用 EF Core
             services.AddDbContext<ApplicationDbContext>(options =>
-                    options.UseSqlite(connectionString));
+                //options.UseSqlite(connectionString));
+                options.UseMySQL(connectionString));
 
             services.AddIdentity<ApplicationUser, ApplicationRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
@@ -79,12 +80,12 @@ namespace UHub.Web
                 // ConfigurationDbContext - used for configuration data such as clients, resources, and scopes
                 .AddConfigurationStore(options =>
                 {
-                    options.ConfigureDbContext = b => b.UseSqlite(connectionString);
+                    options.ConfigureDbContext = b => b.UseMySQL(connectionString);
                 })
                 // PersistedGrantDbContext - used for temporary operational data such as authorization codes, and refresh tokens
                 .AddOperationalStore(options =>
                 {
-                    options.ConfigureDbContext = b => b.UseSqlite(connectionString);
+                    options.ConfigureDbContext = b => b.UseMySQL(connectionString);
                 });
             #endregion
 
@@ -114,7 +115,7 @@ namespace UHub.Web
             services.Configure<UHubOptions>(Configuration.GetSection("UHub"));
 
             // 添加后台任务
-            services.AddBackgroundServices();
+            //services.AddBackgroundServices();
 
             // 添加应用通知任务管理器
             services.AddScoped<AppNoticeTaskManager>();

@@ -16,6 +16,7 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.9" />
+    <PackageReference Include="MySql.Data.EntityFrameworkCore" Version="8.0.21" />
     <PackageReference Include="Serilog.AspNetCore" Version="3.4.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="3.1.5" />
     <PackageReference Include="IdentityServer4.AspNetIdentity" Version="4.0.0" />
@@ -33,10 +34,6 @@
     <None Update="App_Data\UHubKey.jwk">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="DB\" />
   </ItemGroup>
 
 </Project>
